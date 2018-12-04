@@ -70,7 +70,11 @@ void QUAT_Normalize(Quat *q, Quat *qo);
 
 void QUAT_Mul(Quat *q1, Quat *q2, Quat *qo);
 
+void QUAT_Triple_Mul(Quat *q1, Quat *q2, Quat *q3, Quat *qo);
+
 void QUAT_Rotate(Vector3F& axis, float theta, Vector3F &v, Quat &vo);
+
+void QUAT_Scale(Quat *q, float scale);
 
 float VectorDotProduct(Vector3F& v1, Vector3F& v2);
 // vector cross product

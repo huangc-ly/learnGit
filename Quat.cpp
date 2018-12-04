@@ -139,6 +139,19 @@ void QUAT_Rotate(Vector3F& axis, float theta, Vector3F &v, Quat &vo)
 	a.set(0, v);
 	b.set(cos(theta / 2.0), temp);
 	QUAT_Conjuate(&b, &b_conj);
-	QUAT_Mul(&b, &a, &result);
-	QUAT_Mul(&result, &b_conj, &vo);
+	QUAT_Triple_Mul(&b, &a, &b_conj, &vo);
+}
+
+void QUAT_Scale(Quat *q, float scale)
+{
+	q->r *= scale;
+	VectorScale(q->v, scale, q->v);
+}
+
+
+void QUAT_Triple_Mul(Quat *q1, Quat *q2, Quat *q3, Quat *qo)
+{
+	Quat tmp;
+	QUAT_Mul(q1, q2, &tmp);
+	QUAT_Mul(&tmp, q3, qo);
 }

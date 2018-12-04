@@ -3,6 +3,13 @@
 #define QUAT_H_
 
 #define PIE 3.1415926
+#define CAMERA_FRUSTUM_L 0
+#define CAMERA_FRUSTUM_R 1
+#define CAMERA_FRUSTUM_B 2
+#define CAMERA_FRUSTUM_T 3
+#define CAMERA_FRUSTUM_N 4
+#define CAMERA_FRUSTUM_F 5
+
 
 // float point 3 element
 typedef struct vector3f
@@ -91,6 +98,52 @@ void VectorNormalize(Vector3F& v);
 void VectorScale(Vector3F& v1, float s, Vector3F& vo);
 
 void VectorInv(Vector3F& v1, Vector3F& vo);
+
+
+// float matrix 16 element
+typedef struct matrix16f
+{
+	matrix16f(void)
+	{
+		for (int i = 0; i<16; i++) { m[i] = 0.0f; }
+		m[0] = m[5] = m[10] = m[15] = 1.0f;
+	}
+
+	float m[16];
+
+	void Identity(void)
+	{
+		for (int i = 0; i<16; i++) { m[i] = 0.0f; }
+		m[0] = m[5] = m[10] = m[15] = 1.0f;
+	}
+
+	void Transform(const Vector3F& vIn, Vector3F& vOut)
+	{
+		vOut.x = m[0] * vIn.x + m[4] * vIn.y + m[8] * vIn.z + m[12];
+		vOut.y = m[1] * vIn.x + m[5] * vIn.y + m[9] * vIn.z + m[13];
+		vOut.z = m[2] * vIn.x + m[6] * vIn.y + m[10] * vIn.z + m[14];
+	}
+
+	void Multiply(const matrix16f& M)
+	{
+		float C[16] = { 0 };
+
+		for (int i = 0; i<4; i++)
+		{
+			for (int j = 0; j<4; j++)
+			{
+				C[j * 4 + i] = 0.0f;
+				for (int k = 0; k<4; k++)
+				{
+					C[j * 4 + i] += m[k * 4 + i] * M.m[j * 4 + k];
+				}
+			}
+		}
+
+		for (int i = 0; i<16; i++) { m[i] = C[i]; }
+	}
+}Matrix16F;
+
 
 
 #endif
